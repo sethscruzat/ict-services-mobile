@@ -1,0 +1,130 @@
+package com.example.ict_services_mobile.screens.technician.tasks
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowForwardIos
+import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.ict_services_mobile.screens.technician.profile.BottomNavigation
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: techTaskViewModel, email: String){
+    viewModel.getTechTaskList(email)
+    val objList by viewModel.objList.collectAsState()
+    Scaffold(
+        bottomBar =  { BottomNavigation(navController = navController, email) }
+    ){
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally)
+        {
+            Button(
+                modifier = modifier
+                    .padding(12.dp)
+                    .align(Alignment.End),
+                onClick = {
+                    navController.navigate("login") {
+                        navController.graph.startDestinationRoute?.let { screenroute ->
+                            popUpTo(screenroute) {
+                                saveState = false
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = false
+                    }
+                }
+            )
+            {
+                Text("Logout")
+            }
+            Spacer(modifier.weight(0.1f))
+
+            LazyColumn(modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .weight(2f),
+                verticalArrangement = Arrangement.spacedBy(18.dp),
+                contentPadding = PaddingValues(start = 18.dp, end = 18.dp)
+            ){
+                items(objList) { name ->
+                    GenerateTechTaskList(navController = navController,
+                        equipmentID = name.equipmentID,
+                        equipmentName = name.equipmentName,
+                        location = name.location,
+                        remarks = name.remarks,
+                        issuedBy = name.issuedBy)
+                    HorizontalDivider(
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(
+                                start = 0.dp,
+                                top = 12.dp,
+                                end = 0.dp,
+                                bottom = 2.dp
+                            ),
+                        thickness = 1.dp
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostController,
+                         equipmentID: String,
+                         equipmentName: String,
+                         location:String,
+                         remarks:String,
+                         issuedBy:String) {
+    Row(modifier = modifier
+        .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Text(modifier = modifier
+            .weight(1f)
+            .padding(horizontal = 9.dp),text = equipmentID, fontSize = 18.sp)
+        IconButton(onClick = {
+            navController.navigate("techCards/{equipmentID}".replace(oldValue = "{equipmentID}", newValue = equipmentID)) {
+                navController.graph.startDestinationRoute?.let { screenroute ->
+                    popUpTo(screenroute) {
+                        saveState = false
+                    }
+                }
+                launchSingleTop = true
+                restoreState = false
+            }
+        }) {
+            Icon(Icons.Outlined.ArrowForwardIos, contentDescription = "Open", modifier = modifier.size(16.dp))
+        }
+    }
+
+}
