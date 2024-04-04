@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.ArrowForwardIos
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -29,13 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.ict_services_mobile.api.model.TechTaskModel
 import com.example.ict_services_mobile.screens.technician.profile.BottomNavigation
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: techTaskViewModel, email: String){
-    viewModel.getTechTaskList(email)
-    val objList by viewModel.objList.collectAsState()
+    viewModel.getTechTaskItems(email)
+    val taskIDList by viewModel.taskIDList.collectAsState()
     Scaffold(
         bottomBar =  { BottomNavigation(navController = navController, email) }
     ){
@@ -72,13 +74,10 @@ fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostControll
                 verticalArrangement = Arrangement.spacedBy(18.dp),
                 contentPadding = PaddingValues(start = 18.dp, end = 18.dp)
             ){
-                items(objList) { name ->
+                items(taskIDList) { item ->
+                    val index = taskIDList.indexOf(item)
                     GenerateTechTaskList(navController = navController,
-                        equipmentID = name.equipmentID,
-                        equipmentName = name.equipmentName,
-                        location = name.location,
-                        remarks = name.remarks,
-                        issuedBy = name.issuedBy)
+                        equipmentID = item, index = index, email = email)
                     HorizontalDivider(
                         modifier = modifier
                             .fillMaxWidth()
@@ -99,11 +98,7 @@ fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostControll
 
 @Composable
 fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostController,
-                         equipmentID: String,
-                         equipmentName: String,
-                         location:String,
-                         remarks:String,
-                         issuedBy:String) {
+                         equipmentID: String, index: Int, email: String) {
     Row(modifier = modifier
         .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -113,17 +108,14 @@ fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostCo
             .weight(1f)
             .padding(horizontal = 9.dp),text = equipmentID, fontSize = 18.sp)
         IconButton(onClick = {
-            navController.navigate("techCards/{equipmentID}".replace(oldValue = "{equipmentID}", newValue = equipmentID)) {
-                navController.graph.startDestinationRoute?.let { screenroute ->
-                    popUpTo(screenroute) {
-                        saveState = false
-                    }
-                }
+            navController.navigate("techCards/{email}/{index}"
+                .replace(oldValue = "{index}", newValue = index.toString())
+                .replace(oldValue = "{email}", newValue = email)) {
                 launchSingleTop = true
-                restoreState = false
+                restoreState = true
             }
         }) {
-            Icon(Icons.Outlined.ArrowForwardIos, contentDescription = "Open", modifier = modifier.size(16.dp))
+            Icon(Icons.AutoMirrored.Outlined.ArrowForwardIos, contentDescription = "Open", modifier = modifier.size(16.dp))
         }
     }
 

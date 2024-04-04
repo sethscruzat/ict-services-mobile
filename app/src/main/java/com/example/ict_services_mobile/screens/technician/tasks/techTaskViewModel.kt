@@ -12,11 +12,11 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class techTaskViewModel: ViewModel() {
-    private val _objList = MutableStateFlow(emptyList<TechTaskModel>())
-    val objList = _objList.asStateFlow()
+    private val _taskIDList = MutableStateFlow(emptyList<String>())
+    val taskIDList = _taskIDList.asStateFlow()
 
-    fun getTechTaskList(email: String){
-        val client: Call<UserDataModel> = RetrofitConfig.getApiService().getTechTaskList(email)
+    fun getTechTaskItems(email: String){
+        val client: Call<UserDataModel> = RetrofitConfig.getApiService().getTechTaskItems(email)
         client.enqueue(object: Callback<UserDataModel> {
             override fun onResponse(call: Call<UserDataModel>, response: Response<UserDataModel>) {
                 if (response.code() == 200) {
@@ -24,25 +24,12 @@ class techTaskViewModel: ViewModel() {
 
                     if (responseBody != null) {
                         val taskList = responseBody.tasks
-                        val tempObjList = mutableListOf<TechTaskModel>()
+                        val tempObjList = mutableListOf<String>()
                         for (i in taskList.indices) {
                             val equipmentID = taskList[i].equipmentID
-                            val equipmentName = taskList[i].equipmentName
-                            val location = taskList[i].location
-                            val remarks = taskList[i].remarks
-                            val issuedBy = taskList[i].issuedBy
-                            tempObjList.add(
-                                i,
-                                TechTaskModel(
-                                    equipmentID,
-                                    equipmentName,
-                                    location,
-                                    remarks,
-                                    issuedBy
-                                )
-                            )
+                            tempObjList.add(i,equipmentID)
                         }
-                        _objList.value = tempObjList
+                        _taskIDList.value = tempObjList
                     }
                 }
             }

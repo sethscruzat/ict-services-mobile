@@ -90,12 +90,6 @@ fun BottomNavigation(navController: NavController, email: String) {
                 selected = currentRoute == item.screenroute,
                 onClick = {
                     navController.navigate("${item.screenroute}/{email}".replace(oldValue = "{email}", newValue = email)) {
-
-                        navController.graph.startDestinationRoute?.let { screenroute ->
-                            popUpTo(screenroute) {
-                                saveState = true
-                            }
-                        }
                         launchSingleTop = true
                         restoreState = true
                     }
