@@ -36,7 +36,7 @@ import com.example.ict_services_mobile.navigation.navRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: loginViewModel) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: LoginViewModel) {
     val ctx = LocalContext.current
     Column(modifier = Modifier
         .fillMaxWidth()

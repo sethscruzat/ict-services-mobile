@@ -12,7 +12,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class loginViewModel:ViewModel(){
+class LoginViewModel:ViewModel(){
     fun authenticateUser(map: HashMap<String, String>, resp: (Response<UserDataModel>) -> Unit){
         viewModelScope.launch {
             val client: Call<UserDataModel> = RetrofitConfig.getApiService().authenticateUser(map)

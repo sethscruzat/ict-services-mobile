@@ -2,7 +2,6 @@ package com.example.ict_services_mobile.api
 
 import com.example.ict_services_mobile.api.model.TechTaskModel
 import com.example.ict_services_mobile.api.model.UserDataModel
-import com.example.ict_services_mobile.screens.technician.tasks.techTaskViewModel
 
 import retrofit2.Call
 import retrofit2.http.Body

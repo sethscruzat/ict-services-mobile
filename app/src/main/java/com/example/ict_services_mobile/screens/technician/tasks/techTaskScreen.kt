@@ -14,29 +14,38 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
-import androidx.compose.material.icons.outlined.ArrowForwardIos
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.ict_services_mobile.api.model.TechTaskModel
 import com.example.ict_services_mobile.screens.technician.profile.BottomNavigation
+import com.example.ict_services_mobile.screens.technician.profile.ProfileViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: techTaskViewModel, email: String){
-    viewModel.getTechTaskItems(email)
+fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, techTaskViewModel: TechTaskViewModel, email: String){
+    val viewModel: TechTaskViewModel = viewModel()
+    val dataLoaded = remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        if(!dataLoaded.value){
+            viewModel.getTechTaskItems(email)
+            dataLoaded.value = true
+        }
+    }
     val taskIDList by viewModel.taskIDList.collectAsState()
     Scaffold(
         bottomBar =  { BottomNavigation(navController = navController, email) }
