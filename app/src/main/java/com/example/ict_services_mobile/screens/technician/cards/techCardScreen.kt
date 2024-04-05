@@ -9,24 +9,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.ict_services_mobile.api.model.TechTaskModel
+import com.example.ict_services_mobile.api.model.TicketModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TechCardScreen(modifier: Modifier = Modifier, navController: NavHostController, taskInfo: TechTaskModel){
-    val equipmentID = taskInfo.equipmentID
-    val equipmentName = taskInfo.equipmentName
-    val location = taskInfo.location
-    val remarks = taskInfo.remarks
-    val issuedBy = taskInfo.issuedBy
+fun TechCardScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel){
+    val equipmentID = ticketInfo.equipmentID
+    val location = ticketInfo.location
+    val remarks = ticketInfo.remarks
+    val issuedBy = ticketInfo.issuedBy.adminName
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight())
@@ -45,12 +41,6 @@ fun TechCardScreen(modifier: Modifier = Modifier, navController: NavHostControll
         Spacer(modifier = Modifier.weight(0.1f))
         Column(modifier = modifier.weight(2f)){
             Text(text = equipmentID, modifier = modifier
-                .padding(
-                    vertical = 6.dp,
-                    horizontal = 10.dp
-                ),
-                fontSize = 17.sp)
-            Text(text = equipmentName, modifier = modifier
                 .padding(
                     vertical = 6.dp,
                     horizontal = 10.dp

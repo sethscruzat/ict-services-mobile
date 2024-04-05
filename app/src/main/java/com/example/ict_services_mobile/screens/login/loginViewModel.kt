@@ -15,7 +15,7 @@ import retrofit2.Response
 class LoginViewModel:ViewModel(){
     fun authenticateUser(map: HashMap<String, String>, resp: (Response<UserDataModel>) -> Unit){
         viewModelScope.launch {
-            val client: Call<UserDataModel> = RetrofitConfig.getApiService().authenticateUser(map)
+            val client: Call<UserDataModel> = RetrofitConfig.getUserApiService().authenticateUser(map)
             Log.d("OPERATION", "authenticateUser() is executing!")
             client.enqueue(object: Callback<UserDataModel> {
                 override fun onResponse(call: Call<UserDataModel>, response: Response<UserDataModel>) {

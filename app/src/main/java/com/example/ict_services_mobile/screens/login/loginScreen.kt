@@ -18,7 +18,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.ict_services_mobile.navigation.navRoutes
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: LoginViewModel) {
     val ctx = LocalContext.current
@@ -91,7 +89,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                         val responseBody = it.body()
                         println(responseBody)
                         if(responseBody != null && responseBody.role == "technician"){
-                            navController.navigate("techProfile/{email}".replace(oldValue = "{email}", newValue = username)) {
+                            navController.navigate("techProfile/{techID}".replace(oldValue = "{techID}", newValue = responseBody.techID.toString())) {
                                 navController.graph.startDestinationRoute?.let { screenroute ->
                                     popUpTo(screenroute) {
                                         saveState = false

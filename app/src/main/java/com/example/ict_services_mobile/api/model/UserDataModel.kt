@@ -3,8 +3,11 @@ package com.example.ict_services_mobile.api.model
 import com.google.gson.annotations.SerializedName
 
 data class UserDataModel (
-    @SerializedName("id")
-    val id: Int,
+    @SerializedName("techID")
+    val techID: Int,
+
+    @SerializedName("adminID")
+    val adminID: Int,
 
     @SerializedName("email")
     val email: String,
@@ -21,9 +24,17 @@ data class UserDataModel (
     @SerializedName("role")
     val role: String,
 
-    @SerializedName("tasks")
-    val tasks: List<TechTaskModel>,
-
     @SerializedName("remarks")
-    val remarks: List<Any>
+    val remarks: List<RemarkModel>, // TODO: Replace with RemarkModel
+)
+
+data class RemarkModel(
+    @SerializedName("rating")
+    val rating: Int,
+    @SerializedName("taskID")
+    val taskID: Int,
+    @SerializedName("comment")
+    val comment: String,
+    @SerializedName("ratedBy")
+    val ratedBy: IssuedByModel,
 )

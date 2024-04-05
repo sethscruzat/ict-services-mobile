@@ -28,10 +28,10 @@ import com.example.ict_services_mobile.api.model.UserDataModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, email: String, userInfo: UserDataModel) {
+fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel) {
     val name = "${userInfo.firstName} ${userInfo.lastName}"
     Scaffold(
-        bottomBar =  { BottomNavigation(navController = navController, email) }
+        bottomBar =  { BottomNavigation(navController = navController, techID) }
     ){
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -72,7 +72,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostControlle
 }
 
 @Composable
-fun BottomNavigation(navController: NavController, email: String) {
+fun BottomNavigation(navController: NavController, techID: Int) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val items = listOf(
@@ -88,7 +88,7 @@ fun BottomNavigation(navController: NavController, email: String) {
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screenroute,
                 onClick = {
-                    navController.navigate("${item.screenroute}/{email}".replace(oldValue = "{email}", newValue = email)) {
+                    navController.navigate("${item.screenroute}/{techID}".replace(oldValue = "{techID}", newValue = techID.toString())) {
                         navController.graph.startDestinationRoute?.let { screenroute ->
                             popUpTo(screenroute) {
                                 saveState = true

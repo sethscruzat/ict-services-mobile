@@ -32,9 +32,9 @@ import com.example.ict_services_mobile.screens.technician.profile.BottomNavigati
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, taskIDList: List<String>, email: String){
+fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, taskIDList: List<Pair<Int,String>>, techID: Int){
     Scaffold(
-        bottomBar =  { BottomNavigation(navController = navController, email) }
+        bottomBar =  { BottomNavigation(navController = navController, techID) }
     ){
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -70,9 +70,8 @@ fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostControll
                 contentPadding = PaddingValues(start = 18.dp, end = 18.dp)
             ){
                 items(taskIDList) { item ->
-                    val index = taskIDList.indexOf(item)
                     GenerateTechTaskList(navController = navController,
-                        equipmentID = item, index = index, email = email)
+                        equipmentID = item.second, ticketID = item.first, techID = techID)
                     HorizontalDivider(
                         modifier = modifier
                             .fillMaxWidth()
@@ -93,7 +92,7 @@ fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostControll
 
 @Composable
 fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostController,
-                         equipmentID: String, index: Int, email: String) {
+                         equipmentID: String, ticketID: Int, techID:Int) {
     Row(modifier = modifier
         .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -103,9 +102,9 @@ fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostCo
             .weight(1f)
             .padding(horizontal = 9.dp),text = equipmentID, fontSize = 18.sp)
         IconButton(onClick = {
-            navController.navigate("techCards/{email}/{index}"
-                .replace(oldValue = "{index}", newValue = index.toString())
-                .replace(oldValue = "{email}", newValue = email)) {
+            navController.navigate("techCards/{techID}/{ticketID}"
+                .replace(oldValue = "{techID}", newValue = techID.toString())
+                .replace(oldValue = "{ticketID}", newValue = ticketID.toString())) {
                 launchSingleTop = true
                 restoreState = true
             }

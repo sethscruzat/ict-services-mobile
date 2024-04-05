@@ -47,35 +47,35 @@ fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostControl
         composable(navRoutes.Login.screenroute) {
             LoginScreen(modifier, navController, loginViewModel)
         }
-        composable("${navRoutes.TechnicianProfile.screenroute}/{email}") { navBackStackEntry ->
-            val email = navBackStackEntry.arguments?.getString("email")
-            if (email != null) {
+        composable("${navRoutes.TechnicianProfile.screenroute}/{techID}") { navBackStackEntry ->
+            val techID = navBackStackEntry.arguments?.getString("techID")
+            if (techID != null) {
                 LaunchedEffect(Unit) {
-                    viewModelProfile.getTechnicianData(email)
+                    viewModelProfile.getTechnicianData(techID.toInt())
                 }
                 val userInfo by viewModelProfile.userInfo.collectAsState()
-                ProfileScreen(navController = navController, userInfo = userInfo, email = email)
+                ProfileScreen(navController = navController, userInfo = userInfo, techID = techID.toInt())
             }
         }
-        composable("${navRoutes.TechnicianTasks.screenroute}/{email}") { navBackStackEntry ->
-            val email = navBackStackEntry.arguments?.getString("email")
-            if (email != null) {
+        composable("${navRoutes.TechnicianTasks.screenroute}/{techID}") { navBackStackEntry ->
+            val techID = navBackStackEntry.arguments?.getString("techID")
+            if (techID != null) {
                 LaunchedEffect(Unit) {
-                    viewModelTechTask.getTechTaskItems(email)
+                    viewModelTechTask.getTechTaskItems(techID.toInt())
                 }
                 val taskIDList by viewModelTechTask.taskIDList.collectAsState()
-                TechTaskScreen(navController = navController, taskIDList = taskIDList,  email = email)
+                TechTaskScreen(navController = navController, taskIDList = taskIDList,  techID = techID.toInt())
             }
         }
-        composable("${navRoutes.TechnicianTaskCards.screenroute}/{email}/{index}") { navBackStackEntry ->
-            val email = navBackStackEntry.arguments?.getString("email")
-            val index = navBackStackEntry.arguments?.getString("index")
-            if (email != null && index != null) {
+        composable("${navRoutes.TechnicianTaskCards.screenroute}/{techID}/{ticketID}") { navBackStackEntry ->
+            val techID = navBackStackEntry.arguments?.getString("techID")
+            val ticketID = navBackStackEntry.arguments?.getString("ticketID")
+            if (techID != null && ticketID != null) {
                 LaunchedEffect(Unit) {
-                    viewModelTechCard.getTechTaskList(email, index.toInt())
+                    viewModelTechCard.getTechTaskList(techID.toInt(), ticketID.toInt())
                 }
-                val taskInfo by viewModelTechCard.taskInfo.collectAsState()
-                TechCardScreen(navController = navController, taskInfo = taskInfo)
+                val ticketInfo by viewModelTechCard.taskInfo.collectAsState()
+                TechCardScreen(navController = navController, ticketInfo = ticketInfo)
             }
         }
     }

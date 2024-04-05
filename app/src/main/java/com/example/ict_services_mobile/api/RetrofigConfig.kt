@@ -15,8 +15,8 @@ import javax.net.ssl.X509TrustManager
 
 class RetrofitConfig {
     companion object{
-        val BASE_URL: String = "http://10.0.2.2:3000"
-        fun getApiService(): UserApi{
+        private const val BASE_URL: String = "http://10.0.2.2:3000"
+        fun getUserApiService(): UserApi{
             val client = getUnsafeOkHttpClient()
             // Retrofit
             val retrofit = Retrofit.Builder()
@@ -28,7 +28,19 @@ class RetrofitConfig {
             return retrofit.create(UserApi::class.java)
         }
 
-        fun getUnsafeOkHttpClient(): OkHttpClient{
+        fun getTaskApiService(): TaskApi{
+            val client = getUnsafeOkHttpClient()
+            // Retrofit
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+
+            return retrofit.create(TaskApi::class.java)
+        }
+
+        private fun getUnsafeOkHttpClient(): OkHttpClient{
             return try {
                 // Create a trust manager that does not validate certificate chains
                 val trustAllCerts =
