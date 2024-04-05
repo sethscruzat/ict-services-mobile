@@ -2,10 +2,15 @@ package com.example.ict_services_mobile
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,47 +30,52 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             IctservicesmobileTheme {
-                val profileViewModel = ProfileViewModel()
-                val techCardViewModel = TechCardViewModel()
-                val techTaskViewModel = TechTaskViewModel()
-                val loginViewModel = LoginViewModel()
+                NavigationGraph(navController = rememberNavController())
+            }
+        }
+    }
+}
 
-                val modifier: Modifier = Modifier
-                val iViewModelStore = ViewModelStore()
-                val navController = rememberNavController().apply { setViewModelStore(iViewModelStore)  }
+@Composable
+fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = navRoutes.Login.screenroute){
+    val loginViewModel = LoginViewModel()
+    val viewModelProfile: ProfileViewModel = viewModel()
+    val viewModelTechTask: TechTaskViewModel = viewModel()
+    val viewModelTechCard: TechCardViewModel = viewModel()
 
-                NavHost(navController = navController, startDestination = navRoutes.Login.screenroute) {
-                    composable(navRoutes.Login.screenroute) {
-                        LoginScreen(modifier, navController, loginViewModel)
-                    }
-                    composable("${navRoutes.TechnicianProfile.screenroute}/{email}") { navBackStackEntry ->
-                        val email = navBackStackEntry.arguments?.getString("email")
-                        if (email != null) {
-                            ProfileScreen(modifier, navController, profileViewModel, email)
-                        }
-                    }
-                    composable("${navRoutes.TechnicianTasks.screenroute}/{email}") { navBackStackEntry ->
-                        val email = navBackStackEntry.arguments?.getString("email")
-                        if (email != null) {
-                            TechTaskScreen(modifier, navController, techTaskViewModel, email)
-                        }
-                    }
-                    composable("${navRoutes.TechnicianTaskCards.screenroute}/{email}/{index}") { navBackStackEntry ->
-                        val email = navBackStackEntry.arguments?.getString("email")
-                        val index = navBackStackEntry.arguments?.getString("index")
-                        if (email != null && index != null) {
-                            TechCardScreen(modifier, navController,techCardViewModel, email, index.toInt())
-                        }
-                    }
+    NavHost(modifier = modifier,navController = navController, startDestination = startDestination) {
+        composable(navRoutes.Login.screenroute) {
+            LoginScreen(modifier, navController, loginViewModel)
+        }
+        composable("${navRoutes.TechnicianProfile.screenroute}/{email}") { navBackStackEntry ->
+            val email = navBackStackEntry.arguments?.getString("email")
+            if (email != null) {
+                LaunchedEffect(Unit) {
+                    viewModelProfile.getTechnicianData(email)
                 }
-
-                BackHandler {
-                    if (!navController.navigateUp()) {
-                        // If there is no more navigation back stack, you can handle back press here
-                        // For example, close the app or show a confirmation dialog
-                    }
+                val userInfo by viewModelProfile.userInfo.collectAsState()
+                ProfileScreen(navController = navController, userInfo = userInfo, email = email)
+            }
+        }
+        composable("${navRoutes.TechnicianTasks.screenroute}/{email}") { navBackStackEntry ->
+            val email = navBackStackEntry.arguments?.getString("email")
+            if (email != null) {
+                LaunchedEffect(Unit) {
+                    viewModelTechTask.getTechTaskItems(email)
                 }
-
+                val taskIDList by viewModelTechTask.taskIDList.collectAsState()
+                TechTaskScreen(navController = navController, taskIDList = taskIDList,  email = email)
+            }
+        }
+        composable("${navRoutes.TechnicianTaskCards.screenroute}/{email}/{index}") { navBackStackEntry ->
+            val email = navBackStackEntry.arguments?.getString("email")
+            val index = navBackStackEntry.arguments?.getString("index")
+            if (email != null && index != null) {
+                LaunchedEffect(Unit) {
+                    viewModelTechCard.getTechTaskList(email, index.toInt())
+                }
+                val taskInfo by viewModelTechCard.taskInfo.collectAsState()
+                TechCardScreen(navController = navController, taskInfo = taskInfo)
             }
         }
     }

@@ -12,29 +12,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.ict_services_mobile.screens.technician.profile.ProfileViewModel
+import com.example.ict_services_mobile.api.model.TechTaskModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TechCardScreen(modifier: Modifier = Modifier, navController: NavHostController, techCardViewModel: TechCardViewModel, email: String, index: Int){
-    val viewModel: TechCardViewModel = viewModel()
-    val dataLoaded = remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) {
-        viewModel.getTechTaskList(email, index)
-    }
-    val equipmentID by viewModel.equipmentID.collectAsState()
-    val equipmentName by viewModel.equipmentName.collectAsState()
-    val location by viewModel.location.collectAsState()
-    val remarks by viewModel.remarks.collectAsState()
-    val issuedBy by viewModel.issuedBy.collectAsState()
+fun TechCardScreen(modifier: Modifier = Modifier, navController: NavHostController, taskInfo: TechTaskModel){
+    val equipmentID = taskInfo.equipmentID
+    val equipmentName = taskInfo.equipmentName
+    val location = taskInfo.location
+    val remarks = taskInfo.remarks
+    val issuedBy = taskInfo.issuedBy
     Column(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight())

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ict_services_mobile.api.RetrofitConfig
+import com.example.ict_services_mobile.api.model.TechTaskModel
 import com.example.ict_services_mobile.api.model.UserDataModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,14 +15,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ProfileViewModel: ViewModel() {
-    private val _name = MutableStateFlow("")
-    val name = _name.asStateFlow()
-
-    private val _tasks = MutableStateFlow("")
-    val tasks = _tasks.asStateFlow()
-
-    private val _remarks = MutableStateFlow("")
-    val remarks = _remarks.asStateFlow()
+    private val _userInfo = MutableStateFlow(UserDataModel(0, "","","","", "", emptyList<TechTaskModel>(),emptyList<String>()))
+    val userInfo = _userInfo.asStateFlow()
 
     fun getTechnicianData(email: String){
         viewModelScope.launch {
@@ -33,8 +28,7 @@ class ProfileViewModel: ViewModel() {
                             val responseBody = response.body()
 
                             if (responseBody != null) {
-                                val fullName = "${responseBody.firstName} ${responseBody.lastName}"
-                                _name.value = fullName
+                                _userInfo.value = responseBody
                             }
                         }
                     }

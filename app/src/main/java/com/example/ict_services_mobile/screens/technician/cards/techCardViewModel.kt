@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ict_services_mobile.api.RetrofitConfig
 import com.example.ict_services_mobile.api.model.TechTaskModel
+import com.example.ict_services_mobile.api.model.UserDataModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -13,20 +14,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class TechCardViewModel : ViewModel(){
-    private val _equipmentID = MutableStateFlow("")
-    val equipmentID = _equipmentID.asStateFlow()
 
-    private val _equipmentName = MutableStateFlow("")
-    val equipmentName = _equipmentName.asStateFlow()
-
-    private val _location = MutableStateFlow("")
-    val location = _location.asStateFlow()
-
-    private val _remarks = MutableStateFlow("")
-    val remarks = _remarks.asStateFlow()
-
-    private val _issuedBy = MutableStateFlow("")
-    val issuedBy = _issuedBy.asStateFlow()
+    private val _taskInfo = MutableStateFlow(TechTaskModel( "","","","", ""))
+    val taskInfo = _taskInfo.asStateFlow()
 
     fun getTechTaskList(email: String, index: Int){
         viewModelScope.launch {
@@ -42,11 +32,7 @@ class TechCardViewModel : ViewModel(){
                             val responseBody = response.body()
 
                             if (responseBody != null) {
-                                _equipmentID.value = responseBody.equipmentID
-                                _equipmentName.value = responseBody.equipmentName
-                                _location.value = responseBody.location
-                                _remarks.value = responseBody.remarks
-                                _issuedBy.value = responseBody.issuedBy
+                                _taskInfo.value = responseBody
                             }
                         }
                     }
