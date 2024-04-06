@@ -28,7 +28,7 @@ class RetrofitConfig {
             return retrofit.create(UserApi::class.java)
         }
 
-        fun getTaskApiService(): TaskApi{
+        fun getTicketApiService(): TaskApi{
             val client = getUnsafeOkHttpClient()
             // Retrofit
             val retrofit = Retrofit.Builder()

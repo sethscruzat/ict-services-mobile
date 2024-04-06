@@ -1,4 +1,4 @@
-package com.example.ict_services_mobile.screens.technician.tasks
+package com.example.ict_services_mobile.screens.technician.ticketList
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,9 +11,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Objects
 
-class TechTaskViewModel: ViewModel() {
+class TicketListViewModel: ViewModel() {
     private val _taskIDList = MutableStateFlow(emptyList<Pair<Int,String>>())
     val taskIDList = _taskIDList.asStateFlow()
 

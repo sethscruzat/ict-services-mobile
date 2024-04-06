@@ -99,14 +99,14 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                                 restoreState = false
                             }
                         }else if(responseBody != null && responseBody.role == "admin"){
-                            navController.navigate(navRoutes.AdminTickets.screenroute) {
+                            navController.navigate("adminTicketForm/{adminID}".replace(oldValue = "{adminID}", newValue = responseBody.adminID.toString())) {
                                 navController.graph.startDestinationRoute?.let { screenroute ->
                                     popUpTo(screenroute) {
-                                        saveState = true
+                                        saveState = false
                                     }
                                 }
                                 launchSingleTop = true
-                                restoreState = true
+                                restoreState = false
                             }
                         }
                     }else if(it.code() == 404){

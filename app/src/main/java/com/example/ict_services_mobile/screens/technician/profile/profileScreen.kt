@@ -13,7 +13,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.ict_services_mobile.BottomNavItem
+import com.example.ict_services_mobile.TechnicianNavItem
 import com.example.ict_services_mobile.api.model.UserDataModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -31,7 +30,7 @@ import com.example.ict_services_mobile.api.model.UserDataModel
 fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel) {
     val name = "${userInfo.firstName} ${userInfo.lastName}"
     Scaffold(
-        bottomBar =  { BottomNavigation(navController = navController, techID) }
+        bottomBar =  { TechBottomNavigation(navController = navController, techID) }
     ){
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -72,12 +71,12 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostControlle
 }
 
 @Composable
-fun BottomNavigation(navController: NavController, techID: Int) {
+fun TechBottomNavigation(navController: NavController, techID: Int) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val items = listOf(
-        BottomNavItem.Calculator,
-        BottomNavItem.Generator,
+        TechnicianNavItem.Profile,
+        TechnicianNavItem.TechTicketList,
     )
     NavigationBar {
         items.forEach { item ->

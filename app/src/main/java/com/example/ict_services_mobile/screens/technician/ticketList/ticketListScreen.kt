@@ -1,4 +1,4 @@
-package com.example.ict_services_mobile.screens.technician.tasks
+package com.example.ict_services_mobile.screens.technician.ticketList
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
@@ -21,20 +21,18 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.ict_services_mobile.screens.technician.profile.BottomNavigation
+import com.example.ict_services_mobile.screens.technician.profile.TechBottomNavigation
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TechTaskScreen(modifier: Modifier = Modifier, navController: NavHostController, taskIDList: List<Pair<Int,String>>, techID: Int){
+fun TicketListScreen(modifier: Modifier = Modifier, navController: NavHostController, taskIDList: List<Pair<Int,String>>, techID: Int){
     Scaffold(
-        bottomBar =  { BottomNavigation(navController = navController, techID) }
+        bottomBar =  { TechBottomNavigation(navController = navController, techID) }
     ){
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -102,7 +100,7 @@ fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostCo
             .weight(1f)
             .padding(horizontal = 9.dp),text = equipmentID, fontSize = 18.sp)
         IconButton(onClick = {
-            navController.navigate("techCards/{techID}/{ticketID}"
+            navController.navigate("techTicketInfo/{techID}/{ticketID}"
                 .replace(oldValue = "{techID}", newValue = techID.toString())
                 .replace(oldValue = "{ticketID}", newValue = ticketID.toString())) {
                 launchSingleTop = true

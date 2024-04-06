@@ -1,4 +1,4 @@
-package com.example.ict_services_mobile.screens.technician.cards
+package com.example.ict_services_mobile.screens.technician.ticketInfo
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TechCardViewModel : ViewModel(){
+class TicketInfoViewModel : ViewModel(){
 
     private val _taskInfo = MutableStateFlow(TicketModel( 0,"","","", IssuedByModel(0,""), AssignedToModel(0,"")))
     val taskInfo = _taskInfo.asStateFlow()

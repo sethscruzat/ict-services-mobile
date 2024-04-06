@@ -1,4 +1,4 @@
-package com.example.ict_services_mobile.screens.technician.cards
+package com.example.ict_services_mobile.screens.technician.ticketInfo
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
@@ -18,7 +18,7 @@ import com.example.ict_services_mobile.api.model.TicketModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TechCardScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel){
+fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel){
     val equipmentID = ticketInfo.equipmentID
     val location = ticketInfo.location
     val remarks = ticketInfo.remarks

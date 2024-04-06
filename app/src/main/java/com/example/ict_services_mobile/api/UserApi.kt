@@ -13,9 +13,16 @@ interface UserApi {
     @POST("/login")
     fun authenticateUser(@Body map: HashMap<String, String>): Call<UserDataModel>
 
+    //get technician List
+    @GET("/user/tech")
+    fun getTechnicianList(): Call<List<UserDataModel>>
+
     //gets technician information
     @GET("/user/tech/{techID}")
     fun getTechnicianData(@Path("techID") techID: Int): Call<UserDataModel>
+
+    @GET("/user/admin/{adminID}")
+    fun getAdminData(@Path("adminID") adminID: Int): Call<UserDataModel>
 
     // gets the task details for 1 specific task that a technician has
     @GET("/ticket/find/{techID}/{ticketID}")
