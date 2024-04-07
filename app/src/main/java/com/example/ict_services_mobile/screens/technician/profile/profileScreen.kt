@@ -25,6 +25,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ict_services_mobile.TechnicianNavItem
 import com.example.ict_services_mobile.api.model.UserDataModel
 
+/*
+    TODO: Implement function for recently completed tickets
+ */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel) {

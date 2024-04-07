@@ -16,10 +16,10 @@ class TicketListViewModel: ViewModel() {
     private val _taskIDList = MutableStateFlow(emptyList<Pair<Int,String>>())
     val taskIDList = _taskIDList.asStateFlow()
 
-    fun getTechTaskItems(techID: Int){
+    fun getTicketList(techID: Int){
         viewModelScope.launch {
             try{
-                val client: Call<List<TicketModel>> = RetrofitConfig.getUserApiService().getTechTaskItems(techID)
+                val client: Call<List<TicketModel>> = RetrofitConfig.getTicketApiService().getTicketList(techID)
                 client.enqueue(object: Callback<List<TicketModel>> {
                     override fun onResponse(call: Call<List<TicketModel>>, response: Response<List<TicketModel>>) {
                         if (response.code() == 200) {

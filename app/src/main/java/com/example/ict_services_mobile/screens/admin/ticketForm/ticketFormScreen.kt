@@ -38,12 +38,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ict_services_mobile.AdminNavItem
-import com.example.ict_services_mobile.TechnicianNavItem
 import com.example.ict_services_mobile.api.model.AssignedToModel
 import com.example.ict_services_mobile.api.model.IssuedByModel
 import com.example.ict_services_mobile.api.model.TicketModel
 import com.example.ict_services_mobile.api.model.UserDataModel
-import com.example.ict_services_mobile.screens.technician.profile.TechBottomNavigation
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -112,6 +110,8 @@ fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostContro
                     .padding(start = 12.dp, top = 24.dp, end = 12.dp, bottom = 6.dp)
             )
 
+            /* TODO: Update Database to include a field called "availability" and make this drop down only
+                display available technicians */
             var isExpanded by remember { mutableStateOf(false) }
             Box(modifier = Modifier.fillMaxWidth()) {
                 ExposedDropdownMenuBox(
@@ -169,6 +169,7 @@ fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostContro
                             Toast.makeText(ctx, "Ticket successfully created", Toast.LENGTH_SHORT)
                                 .show()
                             // TODO: NOTIFY TECHNICIAN
+                            //      Make Remarks text field bigger
                         } else if (it.code() == 404) {
                             Toast.makeText(ctx, "404 User Not Found", Toast.LENGTH_SHORT).show()
                         }

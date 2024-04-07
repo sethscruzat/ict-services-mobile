@@ -1,11 +1,11 @@
 package com.example.ict_services_mobile.navigation
 
-sealed class navRoutes(var screenroute:String) {
-    object Login : navRoutes("login")
-    object AdminTicketsForm: navRoutes("adminTicketForm") // Form when issuing tasks
-    object AdminTicketsList: navRoutes("adminTicketList") // Issued tasks by admin
-    object AdminRate: navRoutes("adminRate") //Page when admin rates after technician completes
-    object TechnicianProfile: navRoutes("techProfile")
-    object TechnicianTickets: navRoutes("techTicketList") // List of tickets for technician
-    object TechnicianTicketInfo: navRoutes("techTicketInfo") // Expanded
+sealed class NavRoutes(var screenroute:String) {
+    data object Login : NavRoutes("login")
+    data object AdminTicketsForm: NavRoutes("adminTicketForm") // Form when issuing tasks
+    data object AdminTicketsList: NavRoutes("adminTicketList") // Issued tasks by admin
+    data object AdminRate: NavRoutes("adminRate") //Page when admin rates after technician completes
+    data object TechnicianProfile: NavRoutes("techProfile")
+    data object TechnicianTickets: NavRoutes("techTicketList") // List of tickets for technician
+    data object TechnicianTicketInfo: NavRoutes("techTicketInfo") // Expanded
 }

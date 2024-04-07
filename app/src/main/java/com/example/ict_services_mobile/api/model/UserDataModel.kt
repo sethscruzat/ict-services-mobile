@@ -25,14 +25,14 @@ data class UserDataModel (
     val role: String,
 
     @SerializedName("remarks")
-    val remarks: List<RemarkModel>, // TODO: Replace with RemarkModel
+    val remarks: List<RemarkModel>,
 )
 
 data class RemarkModel(
     @SerializedName("rating")
-    val rating: Int,
-    @SerializedName("taskID")
-    val taskID: Int,
+    val rating: Double,
+    @SerializedName("ticketID")
+    val ticketID: Int,
     @SerializedName("comment")
     val comment: String,
     @SerializedName("ratedBy")

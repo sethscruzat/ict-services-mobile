@@ -68,8 +68,8 @@ fun TicketListScreen(modifier: Modifier = Modifier, navController: NavHostContro
                 contentPadding = PaddingValues(start = 18.dp, end = 18.dp)
             ){
                 items(taskIDList) { item ->
-                    GenerateTechTaskList(navController = navController,
-                        equipmentID = item.second, ticketID = item.first, techID = techID)
+                    GenerateTechTicketList(navController = navController,
+                        equipmentID = item.second, ticketID = item.first)
                     HorizontalDivider(
                         modifier = modifier
                             .fillMaxWidth()
@@ -87,10 +87,9 @@ fun TicketListScreen(modifier: Modifier = Modifier, navController: NavHostContro
     }
 }
 
-
 @Composable
-fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostController,
-                         equipmentID: String, ticketID: Int, techID:Int) {
+fun GenerateTechTicketList(modifier: Modifier = Modifier, navController: NavHostController,
+                         equipmentID: String, ticketID: Int) {
     Row(modifier = modifier
         .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -100,8 +99,7 @@ fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostCo
             .weight(1f)
             .padding(horizontal = 9.dp),text = equipmentID, fontSize = 18.sp)
         IconButton(onClick = {
-            navController.navigate("techTicketInfo/{techID}/{ticketID}"
-                .replace(oldValue = "{techID}", newValue = techID.toString())
+            navController.navigate("techTicketInfo/{ticketID}"
                 .replace(oldValue = "{ticketID}", newValue = ticketID.toString())) {
                 launchSingleTop = true
                 restoreState = true
@@ -110,5 +108,4 @@ fun GenerateTechTaskList(modifier: Modifier = Modifier, navController: NavHostCo
             Icon(Icons.AutoMirrored.Outlined.ArrowForwardIos, contentDescription = "Open", modifier = modifier.size(16.dp))
         }
     }
-
 }

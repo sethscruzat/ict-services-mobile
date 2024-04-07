@@ -13,9 +13,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ict_services_mobile.navigation.navRoutes
+import com.example.ict_services_mobile.navigation.NavRoutes
 import com.example.ict_services_mobile.screens.admin.completedTickets.CompletedTicketsScreen
 import com.example.ict_services_mobile.screens.admin.completedTickets.CompletedTicketsViewModel
+import com.example.ict_services_mobile.screens.admin.rateTechnician.RateTicketScreen
+import com.example.ict_services_mobile.screens.admin.rateTechnician.RateTicketsViewModel
 import com.example.ict_services_mobile.screens.admin.ticketForm.TicketFormScreen
 import com.example.ict_services_mobile.screens.admin.ticketForm.TicketFormViewModel
 import com.example.ict_services_mobile.screens.login.LoginScreen
@@ -28,6 +30,23 @@ import com.example.ict_services_mobile.screens.technician.ticketList.TicketListS
 import com.example.ict_services_mobile.screens.technician.ticketList.TicketListViewModel
 import com.example.ict_services_mobile.ui.theme.IctservicesmobileTheme
 
+
+/* TODO:
+    1) Migrate data to MongoDB Atlas
+      1.1) Make sure to update OkHttpClient. We shouldn't be trusting all SSL certificates when it comes to actual production
+      1.2) Migrating to Atlas basically means that instead of running the server on localhost, we're running the servers
+           on MongoDB's servers instead para boogsh cloud-based
+    2) Implement saving user state when killing app
+      2.1) This includes identifying whether or not the user is currently logged in
+      2.2) Make sure to check if state is saved when orientation changes
+    3) Clean up error messages on backend and implement proper error handling for screens that have forms
+      3.1) ticketFormScreen
+      3.2) rateTechnicianScreen
+      3.3) This mostly entails handling cases where user enters the wrong data type
+    4) DESIGN
+    5) Implement Notification, check list to see which screens need it
+    6) Scanning qr codes brings up equipment info
+*/
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +59,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = navRoutes.Login.screenroute){
+fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = NavRoutes.Login.screenroute){
     val loginViewModel = LoginViewModel()
     //Technician
     val viewModelProfile: ProfileViewModel = viewModel()
@@ -49,13 +68,14 @@ fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostControl
     //Admin
     val viewModelTicketForm: TicketFormViewModel = viewModel()
     val viewModelCompletedTickets: CompletedTicketsViewModel = viewModel()
+    val viewModelRateTickets: RateTicketsViewModel = viewModel()
 
     NavHost(modifier = modifier,navController = navController, startDestination = startDestination) {
-        composable(navRoutes.Login.screenroute) {
+        composable(NavRoutes.Login.screenroute) {
             LoginScreen(modifier, navController, loginViewModel)
         }
         // TECHNICIAN ROUTES
-        composable("${navRoutes.TechnicianProfile.screenroute}/{techID}") { navBackStackEntry ->
+        composable("${NavRoutes.TechnicianProfile.screenroute}/{techID}") { navBackStackEntry ->
             val techID = navBackStackEntry.arguments?.getString("techID")
             if (techID != null) {
                 LaunchedEffect(Unit) {
@@ -65,30 +85,29 @@ fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostControl
                 ProfileScreen(navController = navController, userInfo = userInfo, techID = techID.toInt())
             }
         }
-        composable("${navRoutes.TechnicianTickets.screenroute}/{techID}") { navBackStackEntry ->
+        composable("${NavRoutes.TechnicianTickets.screenroute}/{techID}") { navBackStackEntry ->
             val techID = navBackStackEntry.arguments?.getString("techID")
             if (techID != null) {
                 LaunchedEffect(Unit) {
-                    viewModelTicketList.getTechTaskItems(techID.toInt())
+                    viewModelTicketList.getTicketList(techID.toInt())
                 }
                 val taskIDList by viewModelTicketList.taskIDList.collectAsState()
                 TicketListScreen(navController = navController, taskIDList = taskIDList,  techID = techID.toInt())
             }
         }
-        composable("${navRoutes.TechnicianTicketInfo.screenroute}/{techID}/{ticketID}") { navBackStackEntry ->
-            val techID = navBackStackEntry.arguments?.getString("techID")
+        composable("${NavRoutes.TechnicianTicketInfo.screenroute}/{ticketID}") { navBackStackEntry ->
             val ticketID = navBackStackEntry.arguments?.getString("ticketID")
-            if (techID != null && ticketID != null) {
+            if (ticketID != null) {
                 LaunchedEffect(Unit) {
-                    viewModelTechInfo.getTechTaskList(techID.toInt(), ticketID.toInt())
+                    viewModelTechInfo.getTicketInfo(ticketID.toInt())
                 }
-                val ticketInfo by viewModelTechInfo.taskInfo.collectAsState()
-                TicketInfoScreen(navController = navController, ticketInfo = ticketInfo)
+                val ticketInfo by viewModelTechInfo.ticketInfo.collectAsState()
+                TicketInfoScreen(navController = navController, ticketInfo = ticketInfo, viewModel = viewModelTechInfo)
             }
         }
 
         // ADMIN ROUTES
-        composable("${navRoutes.AdminTicketsForm.screenroute}/{adminID}") { navBackStackEntry ->
+        composable("${NavRoutes.AdminTicketsForm.screenroute}/{adminID}") { navBackStackEntry ->
             val adminID = navBackStackEntry.arguments?.getString("adminID")
             if (adminID != null) {
                 LaunchedEffect(Unit) {
@@ -99,14 +118,24 @@ fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostControl
                 TicketFormScreen(navController = navController, viewModel = viewModelTicketForm, adminID = adminID.toInt(), techList = techList)
             }
         }
-        composable("${navRoutes.AdminTicketsList.screenroute}/{adminID}") { navBackStackEntry ->
+        composable("${NavRoutes.AdminTicketsList.screenroute}/{adminID}") { navBackStackEntry ->
             val adminID = navBackStackEntry.arguments?.getString("adminID")
             if (adminID != null) {
                 LaunchedEffect(Unit) {
-                    viewModelCompletedTickets.getAllCompletedTasks()
+                    viewModelCompletedTickets.getCompletedAssignedTasks(adminID.toInt())
                 }
                 val ticketList by viewModelCompletedTickets.ticketList.collectAsState()
-                CompletedTicketsScreen(navController = navController, viewModel = viewModelCompletedTickets, adminID = adminID.toInt(), ticketList = ticketList)
+                CompletedTicketsScreen(navController = navController, adminID = adminID.toInt(), ticketList = ticketList)
+            }
+        }
+        composable("${NavRoutes.AdminRate.screenroute}/{ticketID}") { navBackStackEntry ->
+            val ticketID = navBackStackEntry.arguments?.getString("ticketID")
+            if (ticketID != null) {
+                LaunchedEffect(Unit) {
+                    viewModelRateTickets.getCompletedTicketInfo(ticketID.toInt())
+                }
+                val ticketInfo by viewModelRateTickets.ticketInfo.collectAsState()
+                RateTicketScreen(navController = navController, viewModel = viewModelRateTickets, ticketInfo = ticketInfo)
             }
         }
     }

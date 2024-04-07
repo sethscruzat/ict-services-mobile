@@ -1,6 +1,7 @@
 package com.example.ict_services_mobile.screens.technician.ticketInfo
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -18,7 +20,8 @@ import com.example.ict_services_mobile.api.model.TicketModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel){
+fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel, viewModel: TicketInfoViewModel){
+    val ctx = LocalContext.current
     val equipmentID = ticketInfo.equipmentID
     val location = ticketInfo.location
     val remarks = ticketInfo.remarks
@@ -34,10 +37,7 @@ fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostContro
             onClick = {
                 navController.navigateUp()
             }
-        )
-        {
-            Text("Back")
-        }
+        ) { Text("Back") }
         Spacer(modifier = Modifier.weight(0.1f))
         Column(modifier = modifier.weight(2f)){
             Text(text = equipmentID, modifier = modifier
@@ -64,6 +64,22 @@ fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostContro
                     horizontal = 10.dp
                 ),
                 fontSize = 17.sp)
+
+            Button(
+                modifier = modifier
+                    .padding(12.dp)
+                    .align(Alignment.End),
+                onClick = {
+                    viewModel.markTaskAsDone(ticketInfo.ticketID)
+                    Toast.makeText(ctx, "Ticket marked as Done", Toast.LENGTH_SHORT).show()
+                    navController.navigateUp()
+
+                    /* TODO: 1) IMPLEMENT NOTIFY*/
+                }
+            )
+            {
+                Text("Mark As Done")
+            }
         }
     }
 }

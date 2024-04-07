@@ -16,10 +16,10 @@ import retrofit2.Response
 class CompletedTicketsViewModel: ViewModel(){
     private val _ticketList = MutableStateFlow(emptyList<TicketModel>())
     val ticketList = _ticketList.asStateFlow()
-    fun getAllCompletedTasks(){
+    fun getCompletedAssignedTasks(adminID: Int){
         viewModelScope.launch {
             try {
-                val client: Call<List<TicketModel>> = RetrofitConfig.getTicketApiService().getAllCompletedTasks()
+                val client: Call<List<TicketModel>> = RetrofitConfig.getTicketApiService().getCompletedAssignedTasks(adminID)
                 client.enqueue(object: Callback<List<TicketModel>> {
                     override fun onResponse(call: Call<List<TicketModel>>, response: Response<List<TicketModel>>) {
                         if(response.code() == 200){
