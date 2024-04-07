@@ -80,9 +80,11 @@ fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostControl
             if (techID != null) {
                 LaunchedEffect(Unit) {
                     viewModelProfile.getTechnicianData(techID.toInt())
+                    viewModelProfile.getCompletedTickets(techID.toInt())
                 }
                 val userInfo by viewModelProfile.userInfo.collectAsState()
-                ProfileScreen(navController = navController, userInfo = userInfo, techID = techID.toInt())
+                val completedTicketList by viewModelProfile.recentlyCompletedList.collectAsState()
+                ProfileScreen(navController = navController, userInfo = userInfo,ticketList = completedTicketList ,techID = techID.toInt())
             }
         }
         composable("${NavRoutes.TechnicianTickets.screenroute}/{techID}") { navBackStackEntry ->

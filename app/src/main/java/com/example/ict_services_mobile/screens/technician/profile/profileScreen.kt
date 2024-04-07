@@ -23,14 +23,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ict_services_mobile.TechnicianNavItem
+import com.example.ict_services_mobile.api.model.TicketModel
 import com.example.ict_services_mobile.api.model.UserDataModel
 
 /*
-    TODO: Implement function for recently completed tickets
+    Note: userInfo.remarks has the remarks array, just a for each on it.
+          ticketList contains the list of completed tickets
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel) {
+fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel, ticketList: List<TicketModel>) {
     val name = "${userInfo.firstName} ${userInfo.lastName}"
     Scaffold(
         bottomBar =  { TechBottomNavigation(navController = navController, techID) }
