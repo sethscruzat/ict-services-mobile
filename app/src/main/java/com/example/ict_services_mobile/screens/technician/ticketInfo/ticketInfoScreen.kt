@@ -17,10 +17,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ict_services_mobile.api.model.TicketModel
+import com.example.ict_services_mobile.screens.technician.ticketList.TicketListViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel, viewModel: TicketInfoViewModel){
+fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostController, ticketInfo: TicketModel, viewModel: TicketInfoViewModel, viewModel2: TicketListViewModel){
     val ctx = LocalContext.current
     val equipmentID = ticketInfo.equipmentID
     val location = ticketInfo.location
@@ -71,6 +72,7 @@ fun TicketInfoScreen(modifier: Modifier = Modifier, navController: NavHostContro
                     .align(Alignment.End),
                 onClick = {
                     viewModel.markTaskAsDone(ticketInfo.ticketID)
+                    viewModel2.getTicketList(ticketInfo.assignedTo.techID)
                     Toast.makeText(ctx, "Ticket marked as Done", Toast.LENGTH_SHORT).show()
                     navController.navigateUp()
 

@@ -26,12 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.ict_services_mobile.AuthViewModel
 import com.example.ict_services_mobile.api.model.TicketModel
 import com.example.ict_services_mobile.screens.admin.ticketForm.AdminBottomNavigation
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CompletedTicketsScreen(modifier: Modifier = Modifier, navController: NavHostController, adminID: Int, ticketList: List<TicketModel>) {
+fun CompletedTicketsScreen(modifier: Modifier = Modifier, navController: NavHostController, adminID: Int, ticketList: List<TicketModel>, authViewModel: AuthViewModel) {
     Scaffold(
         bottomBar =  { AdminBottomNavigation(navController = navController, adminID) }
     ) {
@@ -52,6 +53,8 @@ fun CompletedTicketsScreen(modifier: Modifier = Modifier, navController: NavHost
                         .padding(12.dp)
                         .align(Alignment.End),
                     onClick = {
+                        authViewModel.logout()
+                        authViewModel.setLoggedIn(false)
                         navController.navigate("login") {
                             navController.graph.startDestinationRoute?.let { screenroute ->
                                 popUpTo(screenroute) {

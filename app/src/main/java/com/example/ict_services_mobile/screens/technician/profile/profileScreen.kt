@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.ict_services_mobile.AuthViewModel
 import com.example.ict_services_mobile.TechnicianNavItem
 import com.example.ict_services_mobile.api.model.TicketModel
 import com.example.ict_services_mobile.api.model.UserDataModel
@@ -32,7 +33,7 @@ import com.example.ict_services_mobile.api.model.UserDataModel
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel, ticketList: List<TicketModel>) {
+fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostController, techID: Int, userInfo: UserDataModel, ticketList: List<TicketModel>, authViewModel: AuthViewModel) {
     val name = "${userInfo.firstName} ${userInfo.lastName}"
     Scaffold(
         bottomBar =  { TechBottomNavigation(navController = navController, techID) }
@@ -47,6 +48,8 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostControlle
                     .padding(12.dp)
                     .align(Alignment.End),
                 onClick = {
+                    authViewModel.logout()
+                    authViewModel.setLoggedIn(false)
                     navController.navigate("login") {
                         navController.graph.startDestinationRoute?.let { screenroute ->
                             popUpTo(screenroute) {

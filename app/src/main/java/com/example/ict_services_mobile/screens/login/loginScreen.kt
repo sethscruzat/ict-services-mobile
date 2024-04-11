@@ -30,9 +30,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.ict_services_mobile.AuthViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: LoginViewModel) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: LoginViewModel, authViewModel: AuthViewModel) {
     val ctx = LocalContext.current
     Column(modifier = Modifier
         .fillMaxWidth()
@@ -84,9 +85,11 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                 map["email"] = username
                 viewModel.authenticateUser(map){
                     if(it.code() == 200){
+                        authViewModel.setLoggedIn(true)
                         val responseBody = it.body()
-                        println(responseBody)
                         if(responseBody != null && responseBody.role == "technician"){
+                            authViewModel.setUserID(responseBody.techID)
+                            authViewModel.setUserRole(responseBody.role)
                             navController.navigate("techProfile/{techID}".replace(oldValue = "{techID}", newValue = responseBody.techID.toString())) {
                                 navController.graph.startDestinationRoute?.let { screenroute ->
                                     popUpTo(screenroute) {
@@ -97,6 +100,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController,
                                 restoreState = false
                             }
                         }else if(responseBody != null && responseBody.role == "admin"){
+                            authViewModel.setUserID(responseBody.adminID)
+                            authViewModel.setUserRole(responseBody.role)
                             navController.navigate("adminTicketForm/{adminID}".replace(oldValue = "{adminID}", newValue = responseBody.adminID.toString())) {
                                 navController.graph.startDestinationRoute?.let { screenroute ->
                                     popUpTo(screenroute) {

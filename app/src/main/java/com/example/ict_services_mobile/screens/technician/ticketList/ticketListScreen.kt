@@ -26,11 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.ict_services_mobile.AuthViewModel
 import com.example.ict_services_mobile.screens.technician.profile.TechBottomNavigation
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TicketListScreen(modifier: Modifier = Modifier, navController: NavHostController, taskIDList: List<Pair<Int,String>>, techID: Int){
+fun TicketListScreen(modifier: Modifier = Modifier, navController: NavHostController, taskIDList: List<Pair<Int,String>>, techID: Int,authViewModel: AuthViewModel){
     Scaffold(
         bottomBar =  { TechBottomNavigation(navController = navController, techID) }
     ){
@@ -44,6 +45,8 @@ fun TicketListScreen(modifier: Modifier = Modifier, navController: NavHostContro
                     .padding(12.dp)
                     .align(Alignment.End),
                 onClick = {
+                    authViewModel.logout()
+                    authViewModel.setLoggedIn(false)
                     navController.navigate("login") {
                         navController.graph.startDestinationRoute?.let { screenroute ->
                             popUpTo(screenroute) {
@@ -102,7 +105,7 @@ fun GenerateTechTicketList(modifier: Modifier = Modifier, navController: NavHost
             navController.navigate("techTicketInfo/{ticketID}"
                 .replace(oldValue = "{ticketID}", newValue = ticketID.toString())) {
                 launchSingleTop = true
-                restoreState = true
+                restoreState = false
             }
         }) {
             Icon(Icons.AutoMirrored.Outlined.ArrowForwardIos, contentDescription = "Open", modifier = modifier.size(16.dp))

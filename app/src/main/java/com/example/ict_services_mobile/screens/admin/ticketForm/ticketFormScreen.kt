@@ -38,6 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ict_services_mobile.AdminNavItem
+import com.example.ict_services_mobile.AuthViewModel
 import com.example.ict_services_mobile.api.model.AssignedToModel
 import com.example.ict_services_mobile.api.model.IssuedByModel
 import com.example.ict_services_mobile.api.model.TicketModel
@@ -46,7 +47,7 @@ import com.example.ict_services_mobile.api.model.UserDataModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: TicketFormViewModel, adminID: Int, techList: List<UserDataModel>) {
+fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: TicketFormViewModel, adminID: Int, techList: List<UserDataModel>, authViewModel: AuthViewModel) {
     val ctx = LocalContext.current
     val adminData by viewModel.adminInfo.collectAsState()
     Scaffold(
@@ -65,6 +66,8 @@ fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostContro
                     .padding(12.dp)
                     .align(Alignment.End),
                 onClick = {
+                    authViewModel.logout()
+                    authViewModel.setLoggedIn(false)
                     navController.navigate("login") {
                         navController.graph.startDestinationRoute?.let { screenroute ->
                             popUpTo(screenroute) {
