@@ -65,4 +65,19 @@ class RateTicketsViewModel: ViewModel(){
             })
         }
     }
+
+    fun validateRateForm(reqBody: RemarkModel): FormValidationResult{
+        if(reqBody.rating.isNaN()){
+            return FormValidationResult.Invalid("Rating can't be 0!")
+        }
+        if(reqBody.comment.isBlank()){
+            return FormValidationResult.Invalid("Comment must not be empty")
+        }
+        return FormValidationResult.Valid
+    }
+
+    sealed class FormValidationResult {
+        data object Valid : FormValidationResult()
+        data class Invalid(val errorMessage: String) : FormValidationResult()
+    }
 }

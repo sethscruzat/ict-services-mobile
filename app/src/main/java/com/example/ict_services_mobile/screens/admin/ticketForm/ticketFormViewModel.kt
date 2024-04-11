@@ -87,4 +87,19 @@ class TicketFormViewModel:ViewModel(){
             }
         }
     }
+
+    fun validateTicketForm(reqBody: TicketModel): FormValidationResult{
+        if(reqBody.equipmentID.isBlank()){
+            return FormValidationResult.Invalid("No ID for equipment Inputted!")
+        }
+        if(reqBody.location.isBlank()){
+            return FormValidationResult.Invalid("Location cannot be empty")
+        }
+        return FormValidationResult.Valid
+    }
+
+    sealed class FormValidationResult {
+        data object Valid : FormValidationResult()
+        data class Invalid(val errorMessage: String) : FormValidationResult()
+    }
 }

@@ -37,15 +37,10 @@ import com.example.ict_services_mobile.ui.theme.IctservicesmobileTheme
     1) Migrate to using HTTPS
       1.1) Make sure to update OkHttpClient. We shouldn't be trusting all SSL certificates when it comes to actual production
     2) Implement saving user state when killing app
-      2.1) This includes identifying whether or not the user is currently logged in
-      2.2) Make sure to check if state is saved when orientation changes
-    3) Clean up error messages on backend and implement proper error handling for screens that have forms
-      3.1) ticketFormScreen
-      3.2) rateTechnicianScreen
-      3.3) This mostly entails handling cases where user enters the wrong data type
-    4) DESIGN
-    5) Implement Notification, check list to see which screens need it
-    6) Scanning qr codes brings up equipment info
+      2.1) Make sure to check if state is saved when orientation changes
+    3) DESIGN
+    4) Implement Notification, check list to see which screens need it
+    5) Scanning qr codes brings up equipment info
 */
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -108,6 +108,7 @@ fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostContro
                 value = remarks,
                 onValueChange = { remarks = it },
                 label = { Text(text = "Remarks") },
+                maxLines = 5,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 12.dp, top = 24.dp, end = 12.dp, bottom = 6.dp)
@@ -162,21 +163,27 @@ fun TicketFormScreen(modifier: Modifier = Modifier, navController: NavHostContro
                         IssuedByModel(adminID, "${adminData.firstName} ${adminData.lastName}"),
                         AssignedToModel(issuedToID, issuedToName)
                     )
-                    viewModel.assignTask(reqBody) {
-                        if (it.code() == 200) {
-                            equipmentID = ""
-                            location = ""
-                            remarks = ""
-                            issuedToID = 0
-                            issuedToName = ""
-                            Toast.makeText(ctx, "Ticket successfully created", Toast.LENGTH_SHORT)
-                                .show()
-                            // TODO: NOTIFY TECHNICIAN
-                            //      Make Remarks text field bigger
-                        } else if (it.code() == 404) {
-                            Toast.makeText(ctx, "404 User Not Found", Toast.LENGTH_SHORT).show()
+
+                    when (val validationResult = viewModel.validateTicketForm(reqBody = reqBody)){
+                        is TicketFormViewModel.FormValidationResult.Valid -> viewModel.assignTask(reqBody) {
+                            if (it.code() == 200) {
+                                equipmentID = ""
+                                location = ""
+                                remarks = ""
+                                issuedToID = 0
+                                issuedToName = ""
+                                Toast.makeText(ctx, "Ticket successfully created", Toast.LENGTH_SHORT)
+                                    .show()
+                                // TODO: NOTIFY TECHNICIAN
+                            } else if (it.code() == 400) {
+                                Toast.makeText(ctx, "Invalid form details", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        is TicketFormViewModel.FormValidationResult.Invalid -> {
+                            Toast.makeText(ctx, validationResult.errorMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
+
                 }
             )
             {

@@ -108,6 +108,7 @@ fun RateTicketScreen(modifier: Modifier = Modifier, navController: NavHostContro
                 value = comment,
                 onValueChange = { comment = it },
                 label = { Text(text = "Comment") },
+                maxLines = 5,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, top = 24.dp, end = 16.dp, bottom = 6.dp)
@@ -123,15 +124,21 @@ fun RateTicketScreen(modifier: Modifier = Modifier, navController: NavHostContro
                         comment,
                         IssuedByModel(ticketInfo.issuedBy.adminID,ticketInfo.issuedBy.adminName)
                     )
-                    viewModel.rateTechnicianPerformance(reqBody=reqBody, techID = ticketInfo.assignedTo.techID){
-                        if (it.code() == 200) {
-                            rating = 1.0
-                            comment = ""
-                            Toast.makeText(ctx, "Rated successfully", Toast.LENGTH_SHORT).show()
+
+                    when (val validationResult = viewModel.validateRateForm(reqBody = reqBody)){
+                        is RateTicketsViewModel.FormValidationResult.Valid -> viewModel.rateTechnicianPerformance(reqBody=reqBody, techID = ticketInfo.assignedTo.techID){
+                            if (it.code() == 200) {
+                                rating = 0.0
+                                comment = ""
+                                Toast.makeText(ctx, "Rated successfully", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        is RateTicketsViewModel.FormValidationResult.Invalid ->{
+                            Toast.makeText(ctx, validationResult.errorMessage, Toast.LENGTH_SHORT).show()
                         }
                     }
-                    /* TODO: 1) Make Comment text field bigger
-                        2) IMPLEMENT NOTIFY*/
+
+                    /* TODO: 1) IMPLEMENT NOTIFY*/
                 }
             )
             {
