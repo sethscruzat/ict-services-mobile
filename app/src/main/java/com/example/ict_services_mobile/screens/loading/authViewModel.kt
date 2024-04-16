@@ -1,4 +1,4 @@
-package com.example.ict_services_mobile
+package com.example.ict_services_mobile.screens.loading
 
 import android.app.Application
 import android.content.Context

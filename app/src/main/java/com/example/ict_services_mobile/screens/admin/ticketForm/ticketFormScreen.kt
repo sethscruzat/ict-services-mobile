@@ -38,7 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ict_services_mobile.AdminNavItem
-import com.example.ict_services_mobile.AuthViewModel
+import com.example.ict_services_mobile.screens.loading.AuthViewModel
 import com.example.ict_services_mobile.api.model.AssignedToModel
 import com.example.ict_services_mobile.api.model.IssuedByModel
 import com.example.ict_services_mobile.api.model.TicketModel

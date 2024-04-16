@@ -16,6 +16,7 @@ import javax.net.ssl.X509TrustManager
 class RetrofitConfig {
     companion object{
         private const val BASE_URL: String = "http://10.0.2.2:3000"
+        //private const val BASE_URL: String = "http://192.168.195.128:8080"
         fun getUserApiService(): UserApi{
             val client = getUnsafeOkHttpClient()
             // Retrofit

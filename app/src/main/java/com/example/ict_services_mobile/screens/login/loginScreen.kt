@@ -30,7 +30,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.ict_services_mobile.AuthViewModel
+import com.example.ict_services_mobile.screens.loading.AuthViewModel
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier, navController: NavHostController, viewModel: LoginViewModel, authViewModel: AuthViewModel) {

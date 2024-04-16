@@ -1,6 +1,7 @@
 package com.example.ict_services_mobile.navigation
 
 sealed class NavRoutes(var screenroute:String) {
+    data object Landing: NavRoutes("landing")
     data object Login : NavRoutes("login")
     data object AdminTicketsForm: NavRoutes("adminTicketForm") // Form when issuing tasks
     data object AdminTicketsList: NavRoutes("adminTicketList") // Issued tasks by admin

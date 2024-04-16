@@ -22,6 +22,8 @@ import com.example.ict_services_mobile.screens.admin.rateTechnician.RateTicketSc
 import com.example.ict_services_mobile.screens.admin.rateTechnician.RateTicketsViewModel
 import com.example.ict_services_mobile.screens.admin.ticketForm.TicketFormScreen
 import com.example.ict_services_mobile.screens.admin.ticketForm.TicketFormViewModel
+import com.example.ict_services_mobile.screens.loading.AuthViewModel
+import com.example.ict_services_mobile.screens.loading.LandingScreen
 import com.example.ict_services_mobile.screens.login.LoginScreen
 import com.example.ict_services_mobile.screens.login.LoginViewModel
 import com.example.ict_services_mobile.screens.technician.profile.ProfileScreen
@@ -49,40 +51,14 @@ class MainActivity : ComponentActivity() {
             val authViewModel = AuthViewModel(application)
             IctservicesmobileTheme {
                 val navController = rememberNavController()
-                val isLoggedIn = authViewModel.isLoggedIn()
-                val userID = authViewModel.getUserID()
-                val userRole = authViewModel.getUserRole()
                 NavigationGraph(navController = navController, authViewModel = authViewModel)
-                if(isLoggedIn){
-                    if(userRole == "technician"){
-                        navController.navigate("techProfile/{techID}".replace(oldValue = "{techID}", newValue = userID.toString())) {
-                            navController.graph.startDestinationRoute?.let { screenroute ->
-                                popUpTo(screenroute) {
-                                    saveState = false
-                                }
-                            }
-                            launchSingleTop = true
-                            restoreState = false
-                        }
-                    }else if(userRole == "admin"){
-                        navController.navigate("adminTicketForm/{adminID}".replace(oldValue = "{adminID}", newValue = userID.toString())) {
-                            navController.graph.startDestinationRoute?.let { screenroute ->
-                                popUpTo(screenroute) {
-                                    saveState = false
-                                }
-                            }
-                            launchSingleTop = true
-                            restoreState = false
-                        }
-                    }
-                }
             }
         }
     }
 }
 
 @Composable
-fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = NavRoutes.Login.screenroute, authViewModel: AuthViewModel){
+fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostController, startDestination: String = NavRoutes.Landing.screenroute, authViewModel: AuthViewModel){
     val loginViewModel = LoginViewModel()
     //Technician
     val viewModelProfile: ProfileViewModel = viewModel()
@@ -98,6 +74,9 @@ fun NavigationGraph(modifier: Modifier = Modifier, navController: NavHostControl
     val viewModelRateTickets: RateTicketsViewModel = viewModel()
 
     NavHost(modifier = modifier,navController = navController, startDestination = startDestination) {
+        composable(NavRoutes.Landing.screenroute) {
+            LandingScreen(modifier, navController, authViewModel)
+        }
         composable(NavRoutes.Login.screenroute) {
             LoginScreen(modifier, navController, loginViewModel, authViewModel)
         }

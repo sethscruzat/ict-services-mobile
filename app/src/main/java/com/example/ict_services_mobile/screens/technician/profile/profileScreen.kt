@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.ict_services_mobile.AuthViewModel
+import com.example.ict_services_mobile.screens.loading.AuthViewModel
 import com.example.ict_services_mobile.TechnicianNavItem
 import com.example.ict_services_mobile.api.model.TicketModel
 import com.example.ict_services_mobile.api.model.UserDataModel

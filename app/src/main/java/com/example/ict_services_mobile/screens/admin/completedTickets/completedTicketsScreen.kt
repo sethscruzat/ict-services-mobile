@@ -26,7 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.ict_services_mobile.AuthViewModel
+import com.example.ict_services_mobile.screens.loading.AuthViewModel
 import com.example.ict_services_mobile.api.model.TicketModel
 import com.example.ict_services_mobile.screens.admin.ticketForm.AdminBottomNavigation
 
